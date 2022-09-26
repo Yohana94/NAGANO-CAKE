@@ -1,16 +1,123 @@
+<!--admin-->
 <!DOCTYPE html>
 <html>
   <head>
     <title>Naganocake</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+          <%= link_to  root_path, class: 'nav-link text-light' do %>
+            <span class="text-left navbar-brand"><i class="fa-solid fa-cupcake"></i>Naganocake</span>
+          <% end %>
+
+          <% if customer_signed_in? %>
+            <p class="nav-link ml-5 text-light">ようこそ, <%= current_customer.last_name %> さん</p>
+          <% end %>
+          <div class="collapse navbar-collapse"  "text-white" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+
+            <% if admin_signed_in? %>
+
+             <li class="nav-item">
+              <%= link_to admin_items_path, class: 'nav-link text-light' do %>
+              商品一覧
+              <% end %>
+            </li>
+             <li class="nav-item">
+              <%= link_to admin_customers_path, class: 'nav-link text-light' do %>
+              会員一覧
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to  admin_admin_path, class: 'nav-link text-light' do %>
+              注文履歴一覧
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to  admin_genres_path, class: 'nav-link text-light' do %>
+              ジャンル一覧
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to destroy_admin_session_path, method: :delete, class: 'nav-link text-light' do %>
+              ログアウト
+              <% end %>
+            </li>
+            <% elsif customer_signed_in? %>
+             <li class="nav-item">
+              <%= link_to customers_path, class: 'nav-link text-light' do %>
+              マイページ
+              <% end %>
+            </li>
+             <li class="nav-item">
+              <%= link_to items_path, class: 'nav-link text-light' do %>
+              商品一覧
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to cart_items_path, class: 'nav-link text-light' do %>
+              カート
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to destroy_customer_session_path, method: :delete, class: 'nav-link text-light' do %>
+              ログアウト
+              <% end %>
+            </li>
+            <% else %>
+
+             <li class="nav-item">
+              <%= link_to about_path, class: 'nav-link text-light' do %>
+               About
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to items_path, class: 'nav-link text-light' do %>
+              商品一覧
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to new_customer_registration_path, class: 'nav-link text-light' do %>
+               新規登録
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to new_customer_session_path, class: 'nav-link text-light' do %>
+               ログイン
+              <% end %>
+            </li>
+
+            <% end %>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="mb-auto">
+
     <%= yield %>
+    </main>
+
+  <footer class="bg-dark text-white mt-5 pt-5 pb-4">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <p class="font-italic text-center">Give your life a tasty !!</p>
+          </div>
+        </div>
+      </div>
+  </footer>
+
+
   </body>
 </html>

@@ -1,0 +1,43 @@
+<div class="container py-5">
+<span class="alert alert-secondary" role="alert">　注文履歴一覧　</span></br></br></br>
+<table class="table">
+<thead>
+    <tr class="text-center">
+      <th>購入日時 </th>
+      <th>購入者</th>
+      <th>注文個数</th>
+      <th>注文ステータス</th>
+    </tr>
+
+</thead>
+<tbody>
+<% @orders.each do |order| %>
+    <tr>
+      <td><%= link_to order.updated_at, admin_order_path(order.id) %></td>
+      <td><%= order.customer.last_name + order.customer.first_name %></td>
+      <td><%= order.order_details.sum(:amount) %></td>
+      <td><% if order.order_status %>
+            入金待ち
+          <%elsif%>
+            入金確認
+          <%elsif%>
+            製作中
+          <%elsif%>
+            発送準備中
+          <%else%>
+            発送済み
+          <%end%>
+      </td>
+      </tr>
+<%end%>
+</tbody>
+</table>
+</div>
+
+<div class="container">
+<div class="row justify-content-end">
+<div class="col-7">
+  <%= paginate @orders %>
+</div>
+</div>
+</div>

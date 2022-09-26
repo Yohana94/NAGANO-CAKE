@@ -1,0 +1,99 @@
+<div class="container"></br>
+<div class="row justify-content-center">
+    <div class="col-4">
+      <h2>注文履歴詳細</h2></br>
+    </div>
+</div>
+</div>
+
+<div class="container">
+<table class="table table-borderless">
+  <thead>
+    <tr>
+      <th scope="col">購入者</th>
+      <th><%= @customer.last_name + @customer.first_name %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">注文日</th>
+      <td><%= @order.created_at %></td>
+    </tr>
+    <tr>
+      <th scope="row">配送先</th>
+      <td><%= @order.address %></td>
+    </tr>
+    <tr>
+      <th scope="row">支払方法</th>
+      <td><%= @order.method_of_payment_i18n %></td>
+    </tr>
+    <tr>
+      <th scope="row">注文ステータス</th>
+      <td><%= form_with model: @order, url: admin_order_path(@order.id), method: :patch do |f| %>
+          <%= f.select :order_status, Order.order_statuses.keys.map {|k| [I18n.t("enums.order.order_status.#{k}"), k]} %>
+          <%= f.submit '更新', class:"btn btn-success" %>
+          <% end %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="container">
+<div class="row">
+<div class="col-9">
+<table class="table">
+<thead>
+    <tr>
+      <th>商品名</th>
+      <th>単価（税込） </th>
+      <th>数量 </th>
+      <th>小計</th>
+      <th>製作ステータス</th>
+
+    </tr>
+</thead>
+<tbody>
+          <% @order_details.each do |detail| %>
+          <tr>
+          <td><%= detail.item.name %></td>
+          <td><%= detail.item.with_tax_price %></td>
+          <td><%= detail.amount %></td>
+          <td><%= detail.price*detail.amount %></td>
+              <%= form_with model: detail, url: admin_order_detail_path(detail.id), method: :patch do |f| %>
+          <td><%= f.select :making_status, OrderDetail.making_statuses.keys.map {|k| [I18n.t("enums.order_detail.making_status.#{k}"), k]} %></td>
+          <td><%= f.submit '更新', class:"btn btn-success" %></td>
+
+             <%end%>
+              <%end%>
+               </tr>
+        </tbody>
+</table>
+</div>
+
+<div class="row">
+<div class="col-12">
+  <table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">商品合計</th>
+      <th scope="col"><%= @order.accounting_amount %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">送料</th>
+      <td><%= @order.postage %></td>
+    </tr>
+    <tr>
+      <th scope="row">請求金額合計</th>
+      <td><%= @order.accounting_amount+ @order.postage %></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+
